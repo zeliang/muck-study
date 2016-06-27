@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util-4.0.xsd
+    http://www.springframework.org/schema/rabbit
+    http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd"
+	default-lazy-init="false">
+
+	<!-- 启用注解 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.fcuh.data.common.persistence.kafka.hbase,com.fcuh.data.kafka.service">
+	</context:component-scan>
+
+	<!-- 引入属性文件 -->
+	<context:property-placeholder location="classpath:application.properties" />
+
+	<!--本示例采用druid连接池。 连接池配置如下 -->
+	<!-- 配置数据源 -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${druid.initialSize}" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="${druid.maxActive}" />
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${druid.maxIdle}" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${druid.minIdle}" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="${druid.maxWait}" />
+
+		<property name="validationQuery" value="${druid.validationQuery}" />
+		<property name="testOnBorrow" value="${druid.testOnBorrow}" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="25200000" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 监控数据库 -->
+		<property name="filters" value="mergeStat" />
+	</bean>
+
+	<!-- 对数据源进行事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" p:dataSource-ref="dataSource" />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- 发送邮件 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<!-- 服务器 -->
+		<property name="host" value="${sendmail.server.ip}" />
+		<!-- 端口号 -->
+		<property name="port" value="${sendmail.server.port}" />
+		<!-- 用户名 -->
+		<property name="username" value="${sendmail.username}" />
+		<!-- 密码 -->
+		<property name="password" value="${sendmail.password}" />
+		<!-- SMTP服务器验证 -->
+		<property name="javaMailProperties">
+			<props>
+				<!-- 验证身份 -->
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop> 
+				<prop key="mail.smtp.timeout">25000</prop>    
+			</props>
+		</property>
+	</bean>
+	
+	<import resource="spring-mybatis.xml"/>
+	<import resource="spring-hbase.xml"/>
+	<import resource="spring-kafka.xml"/>
+</beans>
+
+
