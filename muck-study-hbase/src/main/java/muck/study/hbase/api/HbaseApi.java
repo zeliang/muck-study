@@ -52,17 +52,11 @@ public class HbaseApi {
 
     /*
      * 为表添加数据（适合知道有多少列族的固定表）
-     * 
      * @rowKey rowKey
-     * 
      * @tableName 表名
-     * 
      * @column1 第一个列族列表
-     * 
      * @value1 第一个列的值的列表
-     * 
      * @column2 第二个列族列表
-     * 
      * @value2 第二个列的值的列表
      */
     public static void addData(String rowKey, String tableName,
