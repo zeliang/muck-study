@@ -32,8 +32,6 @@ public class ReachTopology {
 	    put("engineering.twitter.com/blog/5", Arrays.asList("adam", "david", "sally", "nathan"));
 	    put("tech.backtype.com/blog/123", Arrays.asList("tim", "mike", "john"));
 	  }};
-
-	  
 	  
 	  public static Map<String, List<String>> FOLLOWERS_DB = new HashMap<String, List<String>>() {{
 	    put("sally", Arrays.asList("bob", "tim", "alice", "adam", "jim", "chris", "jai"));
