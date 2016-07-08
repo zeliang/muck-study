@@ -20,7 +20,7 @@ public class HiveTest {
     }
     Connection conn = DriverManager.getConnection("jdbc:hive2://hadoop2:10000/default", "root", "zeliang123");
     Statement stmt = conn.createStatement();
-    String sql = "select * from wyp as t1 inner join wyp as t2 on t1.id=t2.id";
+    String sql = "select * from wyp as t1 inner join wyp as t2 on t1.id=t2.id ";
     System.out.println("Running: " + sql);
     ResultSet res = stmt.executeQuery(sql);
     ResultSetMetaData rsmd = res.getMetaData();

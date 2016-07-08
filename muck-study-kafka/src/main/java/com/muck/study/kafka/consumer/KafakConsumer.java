@@ -46,6 +46,7 @@ public class KafakConsumer implements Runnable {
 	
 
 	public static void main(String[] args) {
+		
 		System.out.println(topic);
 		Thread t = new Thread(new KafakConsumer());
 		t.start();

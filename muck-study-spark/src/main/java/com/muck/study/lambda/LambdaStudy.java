@@ -16,6 +16,7 @@ public class LambdaStudy {
 
 	public void testStream() {
 
+		
 		// 进行过滤，符合x->y的特征。无类型，无括号，无return关键字，无;符号
 		Optional<String> first = target.stream().filter(str -> str.equals("1"))
 				.findFirst();
