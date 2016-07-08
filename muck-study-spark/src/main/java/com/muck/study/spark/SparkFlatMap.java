@@ -13,6 +13,7 @@ import scala.Tuple2;
 public class SparkFlatMap extends BaseMain {
 	public static void main(String[] args) {
 		SparkParams params = parseArgs(args);
+		params.setDefault(false);
 		SparkConf conf = new SparkConf().setAppName(params.getAppName())
 				.setMaster(params.getMaster());
 		if (!params.isDefault()) {
