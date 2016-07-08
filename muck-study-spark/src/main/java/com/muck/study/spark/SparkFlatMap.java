@@ -12,15 +12,6 @@ import scala.Tuple2;
 
 public class SparkFlatMap extends BaseMain {
 	public static void main(String[] args) {
-		new SparkFlatMap().test(args);
-	}
-
-	/***
-	 * 正常能用
-	 * 
-	 * @param args
-	 */
-	private void test(String[] args) {
 		SparkParams params = parseArgs(args);
 		SparkConf conf = new SparkConf().setAppName(params.getAppName())
 				.setMaster(params.getMaster());
