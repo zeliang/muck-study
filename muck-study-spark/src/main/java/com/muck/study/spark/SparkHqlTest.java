@@ -11,7 +11,7 @@ import org.apache.spark.sql.api.java.JavaSchemaRDD;
 
 import com.alibaba.fastjson.JSONObject;
 
-public class SparkSqlTest extends BaseMain {
+public class SparkHqlTest extends BaseMain {
 
 	public static class People implements Serializable {
 		private static final long serialVersionUID = -1518269751097658168L;
