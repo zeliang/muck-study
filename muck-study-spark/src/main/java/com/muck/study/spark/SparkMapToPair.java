@@ -20,7 +20,7 @@ public class SparkMapToPair extends BaseMain{
 		}
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		JavaRDD<String> lines = sc.textFile(params.getInputPath());
-
+		
 		JavaPairRDD<String, Integer> mapper = lines.mapToPair(line -> {
 			return new Tuple2<String, Integer>(line, 1);
 		});
