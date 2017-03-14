@@ -1,15 +1,11 @@
 package com.muck.study.spark;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.sql.api.java.JavaSQLContext;
-import org.apache.spark.sql.api.java.JavaSchemaRDD;
-
-import com.alibaba.fastjson.JSONObject;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.SparkSession;
 
 public class SparkHqlTest extends BaseMain {
 
@@ -55,41 +51,13 @@ public class SparkHqlTest extends BaseMain {
 	}
 
 	public static void main(String[] args) {
-		SparkParams params = parseArgs(args);
-		SparkConf conf = new SparkConf().setAppName(params.getAppName())
-				.setMaster(params.getMaster());
-		if (!params.isDefault()) {
-			conf.setJars(new String[] { params.getJarPath() });
-		}
-		JavaSparkContext sc = new JavaSparkContext(conf);
-		JavaSQLContext sqlContext = new JavaSQLContext(sc);
-
-		JavaRDD<String> lines = sc.textFile(params.getInputPath());
-		JavaRDD<People> rddPeoples = lines.map(line -> {
-			People people = new People();
-			String[] items = line.split(" ");
-			people.setId(items[0]);
-			people.setName(items[1]);
-			people.setAge(items[2]);
-			people.setPhone(items[3]);
-			return people;
-		});
-		JavaSchemaRDD schemaPeople = sqlContext.applySchema(rddPeoples,
-				People.class);
-		schemaPeople.printSchema();
-		schemaPeople.registerAsTable("people");
-		JavaSchemaRDD teenagers = sqlContext
-				.sql("SELECT * FROM people where age > '30' ");
-		List<People> result = teenagers.map(row -> {
-			People one = new People();
-			one.setId(row.getString(0));
-			one.setName(row.getString(1));
-			one.setAge(row.getString(2));
-			one.setPhone(row.getString(3));
-			return one;
-		}).collect();
-		for (People people2 : result) {
-			System.out.println(JSONObject.toJSONString(people2));
-		}
+		SparkSession spark = SparkSession
+				  .builder()
+				  .appName("Java Spark SQL Example")
+				  .config("spark.some.config.option", "some-value")
+				  .getOrCreate();
+		
+		Dataset<Row> df = spark.read().json("examples/src/main/resources/people.json");
+		df.show();
 	}
 }
