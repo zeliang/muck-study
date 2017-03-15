@@ -19,8 +19,8 @@ public class BaseMain {
 
 	static class SparkParams {
 		private String appName = "Test Spark";
-		private String inputPath = "hdfs://ns1/user/hive/warehouse/wyp/wyp.txt";
-		private String master = "local";
+		private String inputPath = "file:\\E:\\bigdata\\muck-study\\muck-study-spark\\src\\main\\resources\\data\\wyp.txt";
+		private String master = "local[*]";
 		private String jarPath = "E:\\work_space\\muck-study\\muck-study-spark\\target\\muck-study-spark.jar";
 		private boolean isDefault = true;
 
